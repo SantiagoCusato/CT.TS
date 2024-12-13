@@ -14,15 +14,16 @@ cerebro.broker.setcash(1000000)
 for symbol in symbols:
     try:
         # Cargar los datos desde Yahoo Finance usando YahooFinanceData
-        data = bt.feeds.YahooFinanceData(
-            dataname=symbol,
-            fromdate=datetime.datetime.strptime(start_date, '%Y-%m-%d'),
-            todate=datetime.datetime.strptime(end_date, '%Y-%m-%d'),
-            reverse=False
-        )
-        print(data)
+        data = bt.feeds.YahooFinanceCSVData(
+              dataname=(f'data/{symbol}.csv'),
+              fromdate=datetime.datetime.strptime(start_date, '%Y-%m-%d'),
+              todate=datetime.datetime.strptime(end_date, '%Y-%m-%d'),
+              reverse=False
+                   )
+        
         # Añadir los datos al cerebro
         cerebro.adddata(data, name=symbol)
+        print(f"Datos cargados para {symbol}. Total de barras de datos: {len(data)}")
         print(f"Datos cargados para {symbol}")
     except Exception as e:
         print(f"Error al cargar datos de {symbol}: {e}")
