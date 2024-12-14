@@ -5,11 +5,11 @@ import pandas as pd
 
 
 # Listado de símbolos de Yahoo Finance
-symbols = ['TSLA', 'GOOGL', 'MSFT', 'AAPL']
+symbols = ['GOOGL', 'MSFT', 'AAPL','TSLA']
 start_date = '2021-01-01'
 end_date = '2021-12-31'
 cerebro = bt.Cerebro()
-cerebro.broker.setcash(1000000)
+cerebro.broker.setcash(100000)
 
 for symbol in symbols:
     try:
@@ -17,7 +17,7 @@ for symbol in symbols:
         df = pd.read_csv(csv_path)
         df.columns = ['datetime', 'open', 'high', 'low', 'close', 'volume', 'openinterest']
         df.to_csv(csv_path, index=False) 
-        df = pd.read_csv(csv_path)
+        print(f"CSV modificado correctamente para {symbol}")
     except Exception as e:
         print(f"Error al modificar csv para cerebro de {symbol}: {e}")
 
