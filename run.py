@@ -1,6 +1,6 @@
 import backtrader as bt
 import datetime
-from strategies import GoldenCross
+from strategies.GoldenCross import GoldenCross
 import pandas as pd
 
 
@@ -33,10 +33,10 @@ for symbol in symbols:
               reverse=False
               
                    )
-        
+       
         # Añadir los datos al cerebro
         cerebro.adddata(data, name=symbol)
-        print(f"Datos cargados para {symbol}. Total de barras de datos: {len(data)}")
+        
         print(f"Datos cargados para {symbol}")
     except Exception as e:
         print(f"Error al cargar datos de {symbol}: {e}")

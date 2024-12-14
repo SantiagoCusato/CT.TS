@@ -33,7 +33,7 @@ class GoldenCross(bt.Strategy):
             if self.crossover > 0:
                 if current_cash >= amount_to_invest:
                     size = math.floor(amount_to_invest / price)
-                    self.buy(size)
+                    self.buy(size=size)
                     self.purchase_log.append({'ticker': self.data._name, 'size': size, 'price': price})
                     print(f"Comprando {size} acciones de {self.data._name} a ${price:.2f}")
                 else:
