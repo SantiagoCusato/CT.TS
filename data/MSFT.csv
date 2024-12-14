@@ -1,4 +1,4 @@
-Price,Adj Close,Close,High,Low,Open,Volume
+datetime,open,high,low,close,volume,openinterest
 Ticker,MSFT,MSFT,MSFT,MSFT,MSFT,MSFT
 Date,,,,,,
 2021-01-04,210.42311096191406,217.69000244140625,223.0,214.80999755859375,222.52999877929688,37130100

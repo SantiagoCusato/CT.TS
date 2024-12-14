@@ -1,4 +1,4 @@
-Price,Adj Close,Close,High,Low,Open,Volume
+datetime,open,high,low,close,volume,openinterest
 Ticker,GOOGL,GOOGL,GOOGL,GOOGL,GOOGL,GOOGL
 Date,,,,,,
 2021-01-04,85.99476623535156,86.30650329589844,88.12449645996094,85.35700225830078,88.0,37324000

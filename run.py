@@ -1,6 +1,7 @@
 import backtrader as bt
 import datetime
 from strategies import GoldenCross
+import pandas as pd
 
 
 # Listado de símbolos de Yahoo Finance
@@ -9,6 +10,17 @@ start_date = '2021-01-01'
 end_date = '2021-12-31'
 cerebro = bt.Cerebro()
 cerebro.broker.setcash(1000000)
+
+for symbol in symbols:
+    try:
+        csv_path = f"data/{symbol}.csv"
+        df = pd.read_csv(csv_path)
+        df.columns = ['datetime', 'open', 'high', 'low', 'close', 'volume', 'openinterest']
+        df.to_csv(csv_path, index=False) 
+        df = pd.read_csv(csv_path)
+    except Exception as e:
+        print(f"Error al modificar csv para cerebro de {symbol}: {e}")
+
 
 # Añadir datos al "Cerebro" para cada símbolo
 for symbol in symbols:
@@ -19,6 +31,7 @@ for symbol in symbols:
               fromdate=datetime.datetime.strptime(start_date, '%Y-%m-%d'),
               todate=datetime.datetime.strptime(end_date, '%Y-%m-%d'),
               reverse=False
+              
                    )
         
         # Añadir los datos al cerebro
