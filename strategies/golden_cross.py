@@ -38,7 +38,8 @@ class GoldenCross(bt.Strategy):
         })
          #Valor total del portafolio en el paso temporal
         cash_available = self.broker.get_cash()
-        print(f"Efectivo disponible: ${cash_available:.2f}")
+        current_date = self.datas[0].datetime.date(0)
+        print(f"{current_date} - Efectivo disponible: ${cash_available:.2f}")
 
         for data in self.datas:
             current_cash = self.broker.cash
