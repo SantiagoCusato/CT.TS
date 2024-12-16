@@ -1,9 +1,10 @@
 import datetime
-import pandas as pd
 
 import backtrader as bt
 
-from strategies.GoldenCross import GoldenCross
+#from strategies.triple_cross import TripleCross
+from strategies.golden_cross import GoldenCross
+from strategies.death_cross import DeathCross
 
 # Listado de símbolos de Yahoo Finance
 symbols = ['GOOGL', 'MSFT', 'AAPL','TSLA']
@@ -12,20 +13,6 @@ end_date = '2021-12-31'
 
 cerebro = bt.Cerebro()
 cerebro.broker.setcash(100000)
-
-# Depuracion de los csv
-for symbol in symbols:
-    try:
-        csv_path = f"data/{symbol}.csv"
-        df = pd.read_csv(csv_path)
-        df.columns = [
-            'datetime', 'open', 'high', 'low', 'close', 'volume', 'openinterest'
-        ]
-        df.to_csv(csv_path, index=False)
-        print(f"CSV modificado correctamente para {symbol}")
-    except Exception as e:
-        print(f"Error al modificar csv para cerebro de {symbol}: {e}")
-
 
 # Añadir datos al "Cerebro" para cada símbolo
 for symbol in symbols:
@@ -38,17 +25,20 @@ for symbol in symbols:
         )
 
         cerebro.adddata(data, name=symbol)
-        print(f"Datos cargados para {symbol}")
+        
     except Exception as e:
         print(f"Error al cargar datos de {symbol}: {e}")
 
 
 # Añadir estrategia al "Cerebro"
 cerebro.addstrategy(GoldenCross)
+cerebro.addstrategy(DeathCross)
+
 
 # Correr la estrategia
+print(f"____ | | Valor inicial del portafolio {cerebro._broker.get_cash()}| | ____ ")
 cerebro.run()
-
+print(f"____ | | Valor Final del portafolio {cerebro._broker.get_cash()}| | ____")
 # Plotear los resultados
 cerebro.plot(
     volume=True,

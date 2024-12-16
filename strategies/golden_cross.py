@@ -1,7 +1,5 @@
 import math
-
 import backtrader as bt
-
 
 class GoldenCross(bt.Strategy):
     params = (
@@ -11,7 +9,7 @@ class GoldenCross(bt.Strategy):
     )
 
     def __init__(self):
-        """Inicialización de indicadores y registros."""
+        # Inicialización de indicadores y registros
         self.indicators = {}
         self.transactions = []  # Registro de todas las transacciones
         self.portfolio_values = []  # Registro del valor del portfolio en el tiempo
@@ -32,12 +30,15 @@ class GoldenCross(bt.Strategy):
             }
 
     def next(self):
-        """Lógica de trading para cada paso temporal."""
+        # Lógica de trading para cada paso temporal
         portfolio_value = self.broker.getvalue()
         self.portfolio_values.append({
             'date': self.datas[0].datetime.date(0),
             'value': portfolio_value,
         })
+         #Valor total del portafolio en el paso temporal
+        cash_available = self.broker.get_cash()
+        print(f"Efectivo disponible: ${cash_available:.2f}")
 
         for data in self.datas:
             current_cash = self.broker.cash
@@ -59,6 +60,7 @@ class GoldenCross(bt.Strategy):
                         'size': size,
                         'price': price,
                         'total': size * price,
+                        'strategy': 'GoldenCross',  # Asociar la estrategia con la compra
                     })
                     self.transactions.append({
                         'date': self.datas[0].datetime.date(0),
@@ -75,35 +77,38 @@ class GoldenCross(bt.Strategy):
             elif position and crossover < 0:
                 size = position.size
                 if size > 0:
-                    self.close(data=data)
-                    self.transactions.append({
-                        'date': self.datas[0].datetime.date(0),
-                        'ticker': data._name,
-                        'action': 'SELL',
-                        'size': size,
-                        'price': price,
-                        'total': size * price,
-                    })
-                    print(f"**Vendiendo {size} acciones de {data._name} a ${price:.2f}**")
+                    # Verificar que la venta es realizada por la estrategia que compró
+                    purchase_strategy = self.purchase_history[data._name][-1]['strategy']
+                    if purchase_strategy == 'GoldenCross':
+                        self.close(data=data)
+                        self.transactions.append({
+                            'date': self.datas[0].datetime.date(0),
+                            'ticker': data._name,
+                            'action': 'SELL',
+                            'size': size,
+                            'price': price,
+                            'total': size * price,
+                        })
+                        print(f"**Vendiendo {size} acciones de {data._name} a ${price:.2f}**")
+                    else:
+                        print(f"**No puedes vender {data._name} con la estrategia GoldenCross**")
                 else:
                     print(f"**No tienes acciones de {data._name} para vender**")
 
     def stop(self):
-        """Generar el reporte final al finalizar la simulación."""
-        print("\n _____ RESUMEN DE TRANSACCIONES ____")
+        # Generar el reporte final de mi estrategia al finalizar la simulación
+        print("\n _____ HISTORIAL DE COMPRAS POR TICKER ____")
+        for ticker, purchases in self.purchase_history.items():
+            print(f"\n{ticker}:")
+            for purchase in purchases:
+                print(f"  {purchase['date']} | Size: {purchase['size']} | "
+                      f"Precio: ${purchase['price']:.2f} | Total: ${purchase['total']:.2f} | Estrategia: {purchase['strategy']}")
+
+        print("\n _____ RESUMEN DE TRANSACCIONES GOLDEN CROSS____")
         for t in self.transactions:
             print(f"{t['date']} | {t['action']} | {t['ticker']} | "
                   f"Size: {t['size']} | Precio: ${t['price']:.2f} | Total: ${t['total']:.2f}")
 
         print("\n____ VARIACIÓN DEL PORTFOLIO _____ ")
         for v in self.portfolio_values:
-            print(f"{v['date']} | Valor del Portfolio: ${v['value']:.2f}")
-
-        print(f"\n ********* VALOR FINAL DEL PORTFOLIO: ${self.broker.getvalue():.2f}")
-
-        print("\n _____ HISTORIAL DE COMPRAS POR TICKER ____")
-        for ticker, purchases in self.purchase_history.items():
-            print(f"\n{ticker}:")
-            for purchase in purchases:
-                print(f"  {purchase['date']} | Size: {purchase['size']} | "
-                      f"Precio: ${purchase['price']:.2f} | Total: ${purchase['total']:.2f}")
+            print(f"{v['date']} | Cartera GoldenCross: ${v['value']:.2f}")
