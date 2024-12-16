@@ -2,7 +2,6 @@ import datetime
 
 import backtrader as bt
 
-#from strategies.triple_cross import TripleCross
 from strategies.golden_cross import GoldenCross
 from strategies.death_cross import DeathCross
 
