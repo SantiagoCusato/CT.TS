@@ -17,10 +17,10 @@ class GoldenCross(bt.Strategy):
 
         for data in self.datas:
             self.indicators[data._name] = {
-                'sma_10': bt.indicators.SimpleMovingAverage(
+                'sma_fast': bt.indicators.SimpleMovingAverage(
                     data.close, period=self.p.fast
                 ),
-                'sma_30': bt.indicators.SimpleMovingAverage(
+                'sma_slow': bt.indicators.SimpleMovingAverage(
                     data.close, period=self.p.slow
                 ),
                 'crossover': bt.indicators.CrossOver(
@@ -78,7 +78,7 @@ class GoldenCross(bt.Strategy):
             elif position and crossover < 0:
                 size = position.size
                 if size > 0:
-                    # Verificar que la venta es realizada por la estrategia que compró
+                    # Verificar que la venta es realizada por la estrategia que compro
                     purchase_strategy = self.purchase_history[data._name][-1]['strategy']
                     if purchase_strategy == 'GoldenCross':
                         self.close(data=data)

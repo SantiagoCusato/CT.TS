@@ -3,17 +3,17 @@ import pandas as pd
 import os
 import time
 
-# Lista de símbolos
+# Lista de simbolos
 symbols = ['AAPL', 'MSFT', 'GOOGL', 'TSLA']
 
 # Fechas
 start_date = "2021-01-01"
 end_date = "2021-12-31"
 
-# Carpeta de salida
+# Carpeta donde se guardaran los csv
 output_folder = "data"
 
-# Crear carpeta de salida si no existe
+# Crear carpeta si no existe
 if not os.path.exists(output_folder):
     os.makedirs(output_folder)
 
@@ -27,7 +27,7 @@ for symbol in symbols:
             tickers=symbol,
             start=start_date,
             end=end_date,
-            interval='1d',  # Velas diarias
+            interval='1d',  
         )
 
         # Definir la ruta del archivo CSV
@@ -39,7 +39,6 @@ for symbol in symbols:
         print(f"✅ Archivo creado: {output_path}")
         time.sleep(0.1)  # Evitar sobrecarga de peticiones
 
-        # Leer y modificar el archivo CSV
         csv_path = f"data/{symbol}.csv"
         df = pd.read_csv(csv_path)
 

@@ -52,7 +52,7 @@ class DeathCross(bt.Strategy):
             if position and crossover < 0:
                 size = position.size
                 if size > 0:
-                    # Verificar que la venta es realizada por la estrategia que compró
+                    # Verificar que la venta es realizada por la estrategia que compro
                     purchase_strategy = self.purchase_history[data._name][-1]['strategy']
                     if purchase_strategy == 'DeathCross':
                         self.close(data=data)
@@ -70,7 +70,7 @@ class DeathCross(bt.Strategy):
                 else:
                     print(f"**No tienes acciones de {data._name} para vender**")
 
-            # Señal de compra: Golden Cross (la media rápida cruza por encima de la media lenta)
+            # Señal de compra: Golden Cross (la media rapida cruza por encima de la media lenta)
             elif not position and crossover > 0:
                 if current_cash >= amount_to_invest:
                     size = math.floor(amount_to_invest / price)

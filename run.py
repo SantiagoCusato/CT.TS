@@ -13,7 +13,7 @@ end_date = '2021-12-31'
 cerebro = bt.Cerebro()
 cerebro.broker.setcash(100000)
 
-# Añadir datos al "Cerebro" para cada símbolo
+# Añadir datos al "Cerebro" para cada simbolo
 for symbol in symbols:
     try:
         data = bt.feeds.YahooFinanceCSVData(
